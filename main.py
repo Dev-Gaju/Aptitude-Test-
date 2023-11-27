@@ -4,7 +4,7 @@ import uvicorn, cv2, torch
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
 
-
+# response when run API
 class AppConfig(BaseSettings):
     app_name: str = "Object Detection Model Serving Demo"
     version: str = "0.1"
@@ -13,7 +13,7 @@ class AppConfig(BaseSettings):
 class IndexResponse(BaseModel):
     response: str = "Model Serving Demo"
 
-
+# Control Version
 class VersionResponse(BaseModel):
     app_name: str
     version: str
@@ -24,10 +24,9 @@ app = FastAPI(title=appconfig.app_name,
               version=appconfig.version,
               description="A demo backend app for serving object Detection model with FastApi.")
 
-# model import and process
+# model import and weights then  process
 device = torch.device('cpu')
-model = torch.hub.load('C:/Users/gazur/PycharmProjects/yolov5', 'custom', path="model/best.pt", source='local',
-                    force_reload=True)
+model = torch.hub.load('C:/Users/gazur/PycharmProjects/yolov5', 'custom', path="model/best.pt", source='local', force_reload=True)
 model.to(device)
 
 
@@ -43,6 +42,7 @@ def version():
         "version": appconfig.version
     }
 
+#make prediction form data
 def predict(contents):
     nparr = np.fromstring(contents, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -50,6 +50,7 @@ def predict(contents):
     return output
 
 
+# read image and return output
 @app.post('/object-detection')
 async def predict_pretrain(image: UploadFile = File(...)):
     contents = await image.read()
