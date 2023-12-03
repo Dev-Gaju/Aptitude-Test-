@@ -1,4 +1,4 @@
-## Task- Object Detection with YOLO
+## Object Detection with YOLO
 
 - **Data Preparation:**
 Given approximately 167 Koala Images and instructions to label those images and build a model on YOLO. I labeled images with the open-source online annotator LabelMe. Create a bounding box for every image and have 5 values one each such as label, x_min, y_min, x_max, y_max.
